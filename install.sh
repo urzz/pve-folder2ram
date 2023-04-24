@@ -95,6 +95,6 @@ chmod +x /sbin/trunc_ram_log
 # 添加清理脚本到定时任务
 echo "Adding log truncation script to cron ..."
 (
-        crontab -l
-        echo "*/30 * * * * root /sbin/trunc_ram_log /var/log 1000"
+    crontab -l
+    echo "*/30 * * * * /sbin/trunc_ram_log /var/log 1000"
 ) | crontab -
