@@ -59,7 +59,7 @@ cleanDir() {
             cleanDir "\$file"
         elif [ -f "\$file" ]; then
             case "\$file" in
-            *.log | *.log.* | *.info | *.warn | *.journal)
+            *.log|*.log.*|*.info|*.warn|*.journal)
                 # keep log files
                 ;;
             *)
@@ -96,5 +96,5 @@ chmod +x /sbin/trunc_ram_log
 echo "Adding log truncation script to cron ..."
 (
     crontab -l
-    echo "*/30 * * * * /sbin/trunc_ram_log /var/log 1000"
+    echo "*/30 * * * * /sbin/trunc_ram_log /var/log 1000 > /tmp/pve-folder2ram-trunc.log"
 ) | crontab -
