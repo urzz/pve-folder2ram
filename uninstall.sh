@@ -1,16 +1,13 @@
 #!/bin/bash
 
-echo "uninstalling ..."
-#echo "uninstall pve-folder2ram? (y\n)"
-#read x
-#if [ $x == 'y' ];then
-   folder2ram -syncall
-   folder2ram -umountall
-   folder2ram -disablesystemd
-   
-   sed -i '/truncLog/d' /etc/crontab
-   systemctl restart cron
-   echo "done."
-#else
-#    exit
-#fi
+echo "Uninstalling ..."
+
+# Unmount and disable folder2ram
+folder2ram -syncall
+folder2ram -umountall
+folder2ram -disablesystemd
+
+# Remove cron job
+crontab -l | sed '/trunc_ram_log/d' | crontab -
+
+echo "Done."
