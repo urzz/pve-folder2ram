@@ -36,23 +36,23 @@ cat <<EOF >/sbin/trunc_ram_log
 # Truncate all files in a directory (recursively) to the last N lines
 # Usage: truncLog <directory> <number_of_lines>
 
-processed_files=$(mktemp)
-trap 'rm -f "$processed_files"' EXIT
+processed_files=\$(mktemp)
+trap 'rm -f "\$processed_files"' EXIT
 
 truncLog() {
-    for file in "$1"/*; do
-        if [ -d "$file" ]; then
-            echo "Processing directory: $file"
-            truncLog "$file" "$2"
-        elif [ -f "$file" ]; then
-            if grep -q "$file" "$processed_files"; then
+    for file in "\$1"/*; do
+        if [ -d "\$file" ]; then
+            echo "Processing directory: \$file"
+            truncLog "\$file" "\$2"
+        elif [ -f "\$file" ]; then
+            if grep -q "\$file" "\$processed_files"; then
                 # Skip files that have already been truncated
                 continue
             fi
-            echo "Truncating file: $file"
-            tail -n "$2" "$file" >"$file.tmp"
-            mv "$file.tmp" "$file"
-            echo "$file" >>"$processed_files"
+            echo "Truncating file: \$file"
+            tail -n "\$2" "\$file" >"\$file.tmp"
+            mv "\$file.tmp" "\$file"
+            echo "\$file" >>"\$processed_files"
         fi
     done
 }
@@ -62,36 +62,36 @@ truncLog() {
 
 cleanDir() {
     local log_files=".log .log. .info .warn .journal"
-    find "$1" -type f | while read file; do
-        local file_name=$(basename "$file")
-        local file_ext="${file_name##*.}"
-        if [[ "$log_files" == *".$file_ext"* ]]; then
+    find "\$1" -type f | while read file; do
+        local file_name=\$(basename "\$file")
+        local file_ext="\${file_name##*.}"
+        if [[ "\$log_files" == *".\$file_ext"* ]]; then
             # Keep log files
             continue
         fi
-        echo "Removing file: $file"
-        rm "$file"
+        echo "Removing file: \$file"
+        rm "\$file"
     done
 }
 
 # Main script
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <directory> <number_of_lines>"
+if [ "\$#" -ne 2 ]; then
+    echo "Usage: \$0 <directory> <number_of_lines>"
     exit 1
 fi
 
-dir="$1"
-lines="$2"
+dir="\$1"
+lines="\$2"
 
-if [ ! -d "$dir" ]; then
-    echo "$dir is not a directory"
+if [ ! -d "\$dir" ]; then
+    echo "\$dir is not a directory"
     exit 1
 fi
 
-echo "Truncating log files in directory: $dir to $lines lines"
-truncLog "$dir" "$lines"
-echo "Cleaning up non-log files in directory: $dir"
-cleanDir "$dir"
+echo "Truncating log files in directory: \$dir to \$lines lines"
+truncLog "\$dir" "\$lines"
+echo "Cleaning up non-log files in directory: \$dir"
+cleanDir "\$dir"
 EOF
 chmod +x /sbin/trunc_ram_log
 
