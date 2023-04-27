@@ -137,5 +137,5 @@ chmod +x /sbin/trunc_ram_log
 echo "Adding log truncation script to cron ..."
 (
     crontab -l
-    echo "*/30 * * * * /sbin/trunc_ram_log /var/log 1000 > /tmp/pve-folder2ram-trunc.log"
+    echo "*/30 * * * * /sbin/trunc_ram_log /var/log 1000 \"/var/log/pve /var/log/ceph /var/log/journal\" > /tmp/pve-folder2ram-trunc.log"
 ) | crontab -
